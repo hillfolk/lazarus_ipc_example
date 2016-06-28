@@ -14,10 +14,12 @@ type
 
   TForm1 = class(TForm)
     Button1: TButton;
-    Memo1: TMemo;
+    Edit1: TEdit;
     SimpleIPCClient1: TSimpleIPCClient;
+    ToggleBox1: TToggleBox;
     procedure Button1Click(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
+    procedure ToggleBox1Change(Sender: TObject);
   private
     { private declarations }
   public
@@ -39,14 +41,27 @@ procedure TForm1.Button1Click(Sender: TObject);
 var
   stream: TStream;
 begin
-  SimpleIPCClient1.Active := True;
-  SimpleIPCClient1.Connect;
-  SimpleIPCClient1.SendStringMessage('SendMsg' + DateTimeToStr(Now));
-  SimpleIPCClient1.;
+  if SimpleIPCClient1.ServerRunning then
+    SimpleIPCClient1.SendStringMessage(Edit1.Text);
+
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
 begin
+
+end;
+
+procedure TForm1.ToggleBox1Change(Sender: TObject);
+begin
+  SimpleIPCClient1.Active := ToggleBox1.Checked;
+  if SimpleIPCClient1.Active then
+  begin
+    SimpleIPCClient1.Connect;
+  end
+  else
+  begin
+    SimpleIPCClient1.Disconnect;
+  end;
 
 end;
 
